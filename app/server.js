@@ -1,7 +1,17 @@
+// package imports
 const express = require('express');
+require("dotenv").config();
+
+// route imports
 
 const app = express();
 
+// middleware
+app.use(express.json());
+
+// app routes
+
+// hello world route to verify the server runs
 app.get('/', (request, response, next) => {
     return response.status(200).json("Hello World");
 });
