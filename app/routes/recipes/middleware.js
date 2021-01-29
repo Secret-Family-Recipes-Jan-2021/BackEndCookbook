@@ -1,3 +1,4 @@
+const Recipe = require('./model');
 
 const validateRecipe = () => {
     return (request, response, next) => {

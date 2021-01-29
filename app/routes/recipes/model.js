@@ -27,7 +27,9 @@ const getRecipes = async () => {
     }
 };
 
-const getRecipeByID = async (id) => {
+const getUserRecipes = async (user_id) => {};
+
+const getRecipeByID = async (recipe_id) => {
     let recipe = await db.table('recipes')
         .join('users','recipes.user_id', '=', 'users.id' )
         .select('title',
@@ -35,13 +37,13 @@ const getRecipeByID = async (id) => {
             'ingredients',
             'instructions',
             'username')
-        .where('recipes.id', id)
+        .where('recipes.id', recipe_id)
         .first();
 
     let categories = await db.table('recipe_category_relation as rcr')
         .join('categories', 'rcr.category_id', 'categories.id')
         .select('categories.id as category_id', 'category_name as category')
-        .where('rcr.recipe_id', id);
+        .where('rcr.recipe_id', recipe_id);
 
     return {...recipe, categories: categories};
 };
@@ -72,19 +74,56 @@ const addRecipe = async (data) => {
         });
 };
 
-const editRecipe = async (id, data) => {
-    await db.table('recipes')
-        .where('id', id)
-        .update(data);
+const editRecipe = async (recipe_id, data) => {
+    let categories = data.categories;
+    let recipe = {
+        title: data.title,
+        source: data.source,
+        ingredients: data.ingredients,
+        instructions: data.instructions,
+        user_id: data.user_id
+    };
 
-    return getRecipeByID(id);
+    await db.table('recipes')
+        .where('id', recipe_id)
+        .update(recipe);
+
+    let results = categories.map((category) => {
+        return db.table('recipe_category_relation').insert({recipe_id: recipe_id, category_id: category});
+    });
+
+    Promise.all(results)
+        .then((values) => {
+            return getRecipeByID(recipe_id);
+        })
+        .catch((error) => {
+            return error;
+        });
 };
 
-const deleteRecipe = async (id) => {
+const deleteRecipe = async (recipe_id) => {
     return db.table('recipes')
-        .where('id', id)
+        .where('id', recipe_id)
         .delete();
 }
+
+const searchRecipes = async (term) => {
+    try {
+        return db.table('recipes').where('title', 'like', `%${term}%`);
+    } catch (error) {
+        return error;
+    }
+};
+
+const searchByCategories = async (categoryArray) => {
+    try {
+        return db.table('recipe_category_relation as rcr')
+            .join('recipes', 'rcr.recipe_id', 'recipes.id')
+            .whereIn('rcr.category_id', categoryArray);
+    } catch (error) {
+        return error;
+    }
+};
 
 const getRecipeCategories = async (recipe) => {
     let categories = await db.table('recipe_category_relation as rcr')
@@ -95,10 +134,18 @@ const getRecipeCategories = async (recipe) => {
     return {...recipe, categories: categories};
 };
 
+const getGuestToken = async (recipe_id) => {
+    // TODO: build a token and return a URI with the token as a query param
+};
+
 module.exports = {
     getRecipes,
+    getUserRecipes,
     getRecipeByID,
     addRecipe,
     editRecipe,
-    deleteRecipe
+    deleteRecipe,
+    searchRecipes,
+    searchByCategories,
+    getGuestToken
 };

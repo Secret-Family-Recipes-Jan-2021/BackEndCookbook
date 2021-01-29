@@ -8,7 +8,16 @@ const recipes = express.Router();
 
 recipes.get('/', async (request, response, next) => {
     try {
-        let recipes = await Recipe.getRecipes();
+        let recipes;
+
+        if(request.query.title) {
+            recipes = await Recipe.searchRecipes(request.query.title);
+        } else if(request.query.categories) {
+            let categories = request.query.categories.split(',');
+            recipes = await Recipe.searchByCategories(categories);
+        } else {
+            recipes = await Recipe.getRecipes();
+        }
 
         return response.status(200).json({data: recipes});
     } catch (error) {
