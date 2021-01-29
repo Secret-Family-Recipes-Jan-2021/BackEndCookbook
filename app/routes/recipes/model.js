@@ -48,7 +48,6 @@ const getRecipeByID = async (id) => {
 
 const addRecipe = async (data) => {
     let categories = data.categories;
-
     let recipe = {
         title: data.title,
         source: data.source,
@@ -78,7 +77,7 @@ const editRecipe = async (id, data) => {
         .where('id', id)
         .update(data);
 
-    return getByID(id);
+    return getRecipeByID(id);
 };
 
 const deleteRecipe = async (id) => {
