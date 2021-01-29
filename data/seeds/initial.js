@@ -1,15 +1,29 @@
+const bcrypt = require('bcrypt');
+
+const seedHashed = async (password) => {
+    return bcrypt.hash(password, parseInt(process.env.HASH_ROUNDS));
+};
+
 exports.seed = async function(knex) {
     // Deletes ALL existing entries
     await knex('users').del()
         .then(function () {
-            // Inserts seed entries
-            return knex('users').insert([
-                {id: 1, username: 'jameskirk', password: '12345'},
-                {id: 2, username: 'brian_r', password: '12345'},
-                {id: 3, username: 'babbish', password: '12345'},
-                {id: 4, username: 'yondu', password: '12345'},
-                {id: 5, username: 'curie', password: '12345'}
-            ]);
+            let users = [
+                    {id: 1, username: 'jameskirk', password: '12345'},
+                    {id: 2, username: 'brian_r', password: '12345'},
+                    {id: 3, username: 'babbish', password: '12345'},
+                    {id: 4, username: 'yondu', password: '12345'},
+                    {id: 5, username: 'curie', password: '12345'}
+                ];
+
+            let hashed = users.map(async (user) => {
+               return {...user, password: await seedHashed(user.password)};
+            });
+
+            return Promise.all(hashed)
+                .then((values) => {
+                    return knex('users').insert(values);
+                });
         });
 
     await knex('recipes').del()
