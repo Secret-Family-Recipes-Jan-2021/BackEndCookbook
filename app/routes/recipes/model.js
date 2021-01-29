@@ -38,7 +38,12 @@ const getRecipeByID = async (id) => {
         .where('recipes.id', id)
         .first();
 
-    return getRecipeCategories(recipe);
+    let categories = await db.table('recipe_category_relation as rcr')
+        .join('categories', 'rcr.category_id', 'categories.id')
+        .select('categories.id as category_id', 'category_name as category')
+        .where('rcr.recipe_id', id);
+
+    return {...recipe, categories: categories};
 };
 
 const addRecipe = async (data) => {
@@ -64,11 +69,8 @@ const deleteRecipe = async (id) => {
 
 const getRecipeCategories = async (recipe) => {
     let categories = await db.table('recipe_category_relation as rcr')
-        .join('categories',
-            'rcr.category_id',
-            'categories.id')
-        .select('categories.id as category_id',
-            'category_name as category')
+        .join('categories', 'rcr.category_id', 'categories.id')
+        .select('categories.id as category_id', 'category_name as category')
         .where('rcr.recipe_id', recipe.id);
 
     return {...recipe, categories: categories};
