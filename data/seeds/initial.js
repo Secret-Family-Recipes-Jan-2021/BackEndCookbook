@@ -6,7 +6,9 @@ exports.seed = async function(knex) {
             return knex('users').insert([
                 {id: 1, username: 'jameskirk', password: '12345'},
                 {id: 2, username: 'brian_r', password: '12345'},
-                {id: 3, username: 'babbish', password: '12345'}
+                {id: 3, username: 'babbish', password: '12345'},
+                {id: 4, username: 'yondu', password: '12345'},
+                {id: 5, username: 'curie', password: '12345'}
             ]);
         });
 
@@ -31,7 +33,18 @@ exports.seed = async function(knex) {
             return knex('categories').insert([
                 {id: 1, category_name: 'joke'},
                 {id: 2, category_name: 'dinner'},
-                {id: 3, category_name: 'breakfast'}
+                {id: 3, category_name: 'breakfast'},
+                {id: 4, category_name: 'lunch'},
+                {id: 5, category_name: 'brunch'},
+                {id: 6, category_name: 'second breakfast'},
+                {id: 7, category_name: 'lembas'},
+                {id: 8, category_name: 'spicy'},
+                {id: 9, category_name: 'sweet'},
+                {id: 10, category_name: 'sour'},
+                {id: 11, category_name: 'munchies'},
+                {id: 12, category_name: 'tea'},
+                {id: 13, category_name: 'vegetarian'},
+                {id: 14, category_name: 'probably safe'}
             ]);
         });
 
