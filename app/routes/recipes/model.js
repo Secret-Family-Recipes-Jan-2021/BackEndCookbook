@@ -1,33 +1,34 @@
 const db = require('../../../data/dbConfig');
 
-const getRecipes = () => {
-    return db.table('recipes')
-        .join('users','recipes.user_id', '=', 'users.id' )
-        .select('recipes.id',
-            'title',
-            'source',
-            'ingredients',
-            'instructions',
-            'username as author');
-};
+const getRecipes = async () => {
+    try {
+        let recipes = await db.table('recipes')
+            .join('users','recipes.user_id', 'users.id' )
+            .select('recipes.id',
+                'title',
+                'source',
+                'ingredients',
+                'instructions',
+                'username as author');
 
-const getRecipeCategories = (id = false) => {
-    if(!id) {
-        return db.table('recipe_category_relation as rcr')
-            .join('categories',
-                'rcr.category_id',
-                'categories.id');
-    } else {
-        return db.table('recipe_category_relation as rcr')
-            .join('categories',
-                'rcr.category_id',
-                'categories.id')
-            .where('rcr.recipe_id', id);
+        let categories = recipes.map((recipe) => {
+            return getRecipeCategories(recipe);
+        });
+
+        return Promise.all(categories)
+            .then((values) => {
+                return values
+            })
+            .catch((error) => {
+                console.log(error)
+            });
+    } catch (error) {
+        return error;
     }
 };
 
-const getRecipeByID = (id) => {
-    return db.table('recipes')
+const getRecipeByID = async (id) => {
+    let recipe = await db.table('recipes')
         .join('users','recipes.user_id', '=', 'users.id' )
         .select('title',
             'source',
@@ -36,6 +37,8 @@ const getRecipeByID = (id) => {
             'username as author')
         .where('recipes.id', id)
         .first();
+
+    return getRecipeCategories(recipe);
 };
 
 const addRecipe = async (data) => {
@@ -59,9 +62,20 @@ const deleteRecipe = async (id) => {
         .delete();
 }
 
+const getRecipeCategories = async (recipe) => {
+    let categories = await db.table('recipe_category_relation as rcr')
+        .join('categories',
+            'rcr.category_id',
+            'categories.id')
+        .select('categories.id as category_id',
+            'category_name as category')
+        .where('rcr.recipe_id', recipe.id);
+
+    return {...recipe, categories: categories};
+};
+
 module.exports = {
     getRecipes,
-    getRecipeCategories,
     getRecipeByID,
     addRecipe,
     editRecipe,
