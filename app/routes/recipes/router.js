@@ -1,7 +1,6 @@
 const express = require('express');
 
 const Recipe = require('./model');
-const Categories = require('../categories/model');
 
 const { validateRecipe } = require('./middleware');
 

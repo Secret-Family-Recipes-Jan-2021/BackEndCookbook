@@ -9,7 +9,7 @@ const getRecipes = async () => {
                 'source',
                 'ingredients',
                 'instructions',
-                'username as author');
+                'username');
 
         let categories = recipes.map((recipe) => {
             return getRecipeCategories(recipe);
@@ -34,7 +34,7 @@ const getRecipeByID = async (id) => {
             'source',
             'ingredients',
             'instructions',
-            'username as author')
+            'username')
         .where('recipes.id', id)
         .first();
 
@@ -47,10 +47,30 @@ const getRecipeByID = async (id) => {
 };
 
 const addRecipe = async (data) => {
-    let [id] = db.table('recipes')
-        .insert(data);
+    let categories = data.categories;
 
-    return getByID(id);
+    let recipe = {
+        title: data.title,
+        source: data.source,
+        ingredients: data.ingredients,
+        instructions: data.instructions,
+        user_id: data.user_id
+    };
+
+    let [id] = await db.table('recipes')
+        .insert(recipe);
+
+    let results = categories.map((category) => {
+        return db.table('recipe_category_relation').insert({recipe_id: id, category_id: category});
+    });
+
+    Promise.all(results)
+        .then((values) => {
+            return getRecipeByID(id);
+        })
+        .catch((error) => {
+            return error;
+        });
 };
 
 const editRecipe = async (id, data) => {
