@@ -7,6 +7,7 @@ const cookieParser = require("cookie-parser");
 const restricted = require('./middleware/restricted');
 
 // route imports
+const categories = require('./routes/categories/router');
 const recipes = require('./routes/recipes/router');
 
 const app = express();
@@ -16,7 +17,9 @@ app.use(express.json());
 app.use(cookieParser());
 
 // app routes
-app.use('/api/recipes', restricted, recipes);
+app.use('/api/categories', categories);
+app.use('/api/recipes', recipes);
+// app.use('/api/recipes', restricted, recipes);
 
 // hello world route to verify the server runs
 app.get('/', (request, response, next) => {
