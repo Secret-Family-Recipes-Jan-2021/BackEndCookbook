@@ -4,6 +4,7 @@ require("dotenv").config();
 const cookieParser = require("cookie-parser");
 
 // middleware imports
+const requestLogger = require('./middleware/requestLogger');
 const restricted = require('./middleware/restricted');
 
 // route imports
@@ -13,6 +14,7 @@ const recipes = require('./routes/recipes/router');
 const app = express();
 
 // middleware
+app.use(requestLogger());
 app.use(express.json());
 app.use(cookieParser());
 
