@@ -3,6 +3,7 @@ const express = require('express');
 require("dotenv").config();
 
 // route imports
+const recipes = require('./routes/recipes/router');
 
 const app = express();
 
@@ -10,6 +11,7 @@ const app = express();
 app.use(express.json());
 
 // app routes
+app.use('/api/recipes', recipes);
 
 // hello world route to verify the server runs
 app.get('/', (request, response, next) => {
