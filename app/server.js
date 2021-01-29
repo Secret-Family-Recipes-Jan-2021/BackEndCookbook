@@ -17,7 +17,7 @@ app.get('/', (request, response, next) => {
 });
 
 // generic error handler
-app.use((error, request, response) => {
+app.use((error, request, response, next) => {
     console.log(error);
     return response.status(500).json({'message': 'an error occurred'});
 });
