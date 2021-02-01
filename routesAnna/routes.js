@@ -33,3 +33,44 @@ router.post('/register', async (req, res, next)=> {
         next(err)
     }
 })
+
+
+router.post("/login", async (req, res, next)=> {
+    try{
+        const {username, password} = req.body
+        const registered = await module.findBy({username})
+
+        if(!registered){
+            return res.status(401).json({
+                message: "you must register first"
+            })
+        }
+
+        const passwordValid =  await bcrypt.compareSync(password, registered.password)
+
+        if(!passwordValid){
+            return res.status(401).json({
+                message: "That's not the password"
+            })
+        }
+
+        const token = jwt.sign({
+            userId: registered.id,
+        }, process.env.JWT_SECRET, {expiresIn: "7d"})
+
+        res.cookie("token", token)
+
+        res.json({
+            message: `Welcome ${registered.username}`,
+            token: token
+        })
+
+    }
+    catch(err){
+        next(err)
+    }
+})
+
+
+module.exports = router
+
