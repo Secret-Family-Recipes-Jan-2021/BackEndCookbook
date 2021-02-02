@@ -22,11 +22,9 @@ app.use(cookieParser());
 
 // app routes
 app.use("/users", userRoute);
-app.use('/api/categories', restricted, categories);
-app.use('/api/recipes', restricted, recipes);
-// app.use('/api/categories', categories);
-// app.use('/api/recipes', recipes);
-app.use('/api/guests', guests);
+app.use('/categories', restricted, categories);
+app.use('/recipes', restricted, recipes);
+app.use('/guests', guests);
 
 // hello world route to verify the server runs
 app.get('/', (request, response, next) => {
