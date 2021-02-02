@@ -1,6 +1,7 @@
 // package imports
 const express = require('express');
 require("dotenv").config();
+const userRoute = require("../routesAnna/routes")
 
 // route imports
 
@@ -10,6 +11,7 @@ const app = express();
 app.use(express.json());
 
 // app routes
+app.use("/users", userRoute);
 
 // hello world route to verify the server runs
 app.get('/', (request, response, next) => {
