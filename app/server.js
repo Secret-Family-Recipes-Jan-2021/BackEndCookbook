@@ -1,17 +1,32 @@
 // package imports
 const express = require('express');
 require("dotenv").config();
-const userRoute = require("../routesAnna/routes")
+const cookieParser = require("cookie-parser");
+
+// middleware imports
+const requestLogger = require('./middleware/requestLogger');
+const restricted = require('./middleware/restricted');
 
 // route imports
+const userRoute = require("../routesAnna/routes")
+const categories = require('./routes/categories/router');
+const recipes = require('./routes/recipes/router');
+const guests = require('./routes/guests/router');
 
 const app = express();
 
 // middleware
+app.use(requestLogger());
 app.use(express.json());
+app.use(cookieParser());
 
 // app routes
 app.use("/users", userRoute);
+app.use('/api/categories', restricted, categories);
+app.use('/api/recipes', restricted, recipes);
+// app.use('/api/categories', categories);
+// app.use('/api/recipes', recipes);
+app.use('/api/guests', guests);
 
 // hello world route to verify the server runs
 app.get('/', (request, response, next) => {
