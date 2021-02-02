@@ -31,9 +31,9 @@ const validateRecipe = () => {
 };
 
 const validateRecipeID = () => {
-    return (request, response, next) => {
+    return async (request, response, next) => {
         try {
-            let recipe = Recipe.getRecipeByID(request.params.id);
+            let recipe = await Recipe.getRecipeByID(request.params.id);
 
             if (recipe) {
                 request.recipe = recipe;
