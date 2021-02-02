@@ -72,6 +72,58 @@ router.post("/login", async (req, res, next)=> {
     }
 })
 
+router.get("/", async (req, res, next)=> {
+    try{
+        const id = req.params.id
+        const users = model.listUsers()
+
+        res.status(200).json(users)
+
+    }
+    catch(err){
+        next(err)
+    }
+})
+
+router.get("/:id", async (req, res, next)=> {
+    try{
+        const [id] = req.params.id
+        const user = model.findByUserId(id)
+
+        if(!user){
+            res.status(401).json({
+                message: "There's no user with this id"
+            })
+        }
+
+         res.status(200).json(user)
+
+    }
+    catch(err){
+        next(err)
+    }
+})
+
+
+
+router.get("/:id/recipes", async (req, res, next)=> {
+    try{
+
+    }
+    catch(err){
+        next(err)
+    }
+})
+
+router.post("/:id/recipes", async (req, res, next)=> {
+    try{
+
+    }
+    catch(err){
+        next(err)
+    }
+})
+
 
 module.exports = router
 

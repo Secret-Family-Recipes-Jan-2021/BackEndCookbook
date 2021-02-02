@@ -23,9 +23,14 @@ function findIt(username){
         .where(username)
 }
 
+function listUsers(){
+    return("users")
+}
+
 module.exports = {
     add,
     findBy,
     findByUserId,
-    findIt
+    findIt,
+    listUsers
 }
