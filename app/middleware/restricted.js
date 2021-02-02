@@ -7,7 +7,7 @@ module.exports = (request, response, next) => {
         if (token) {
             jwt.verify(token, process.env.JWT_SECRET, (error, decoded) => {
                 if(error) {
-                    return response.status(400).json({'message': 'token invalid'});
+                    return response.status(400).json({message: 'token invalid'});
                 } else {
                     request.token = decoded;
 
@@ -15,7 +15,7 @@ module.exports = (request, response, next) => {
                 }
             });
         } else {
-            return response.status(400).json({'message': 'token required'});
+            return response.status(400).json({message: 'token required'});
         }
 
     } catch (error) {

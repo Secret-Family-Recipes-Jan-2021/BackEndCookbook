@@ -20,10 +20,10 @@ app.use(express.json());
 app.use(cookieParser());
 
 // app routes
-// app.use('/api/categories', restricted, categories);
-// app.use('/api/recipes', restricted, recipes);
-app.use('/api/categories', categories);
-app.use('/api/recipes', recipes);
+app.use('/api/categories', restricted, categories);
+app.use('/api/recipes', restricted, recipes);
+// app.use('/api/categories', categories);
+// app.use('/api/recipes', recipes);
 app.use('/api/guests', guests);
 
 // hello world route to verify the server runs
