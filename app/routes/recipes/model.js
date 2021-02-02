@@ -51,6 +51,26 @@ const getUserRecipes = async (user_id) => {
         });
 };
 
+const getUserRecipeByID = async (user_id, recipe_id) => {
+    let recipe = await db.table('recipes')
+        .join('users','recipes.user_id', '=', 'users.id' )
+        .select('title',
+            'source',
+            'ingredients',
+            'instructions',
+            'username')
+        .where('recipes.id', recipe_id)
+        .where('recipes.user_id', user_id)
+        .first();
+
+    let categories = await db.table('recipe_category_relation as rcr')
+        .join('categories', 'rcr.category_id', 'categories.id')
+        .select('categories.id as category_id', 'category_name as category')
+        .where('rcr.recipe_id', recipe_id);
+
+    return {...recipe, categories: categories};
+};
+
 const getRecipeByID = async (recipe_id) => {
     let recipe = await db.table('recipes')
         .join('users','recipes.user_id', '=', 'users.id' )
@@ -162,8 +182,9 @@ const getGuestToken = async (recipe_id) => {
 
 module.exports = {
     getRecipes,
-    getUserRecipes,
     getRecipeByID,
+    getUserRecipes,
+    getUserRecipeByID,
     addRecipe,
     editRecipe,
     deleteRecipe,
