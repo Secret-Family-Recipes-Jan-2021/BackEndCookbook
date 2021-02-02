@@ -8,7 +8,9 @@ const guests = express.Router();
 
 guests.get('/', validateGuestToken(), async (request, response, next) => {
    try {
-       return response.status(200).json({message: 'Hello World'});
+       let recipe = await Recipe.getRecipeByID(request.guestToken.recipe_id);
+
+       return response.status(200).json({data: recipe});
    } catch (error) {
        next(error);
    }

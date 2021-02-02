@@ -176,10 +176,6 @@ const getRecipeCategories = async (recipe) => {
     return {...recipe, categories: categories};
 };
 
-const getGuestToken = async (recipe_id) => {
-    // TODO: build a token and return a URI with the token as a query param
-};
-
 module.exports = {
     getRecipes,
     getRecipeByID,
@@ -189,6 +185,5 @@ module.exports = {
     editRecipe,
     deleteRecipe,
     searchRecipes,
-    searchByCategories,
-    getGuestToken
+    searchByCategories
 };

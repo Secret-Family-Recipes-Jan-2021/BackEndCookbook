@@ -1,4 +1,5 @@
 const express = require('express');
+const jwt = require('jsonwebtoken');
 
 const Recipe = require('./model');
 
@@ -6,6 +7,7 @@ const { validateRecipe, validateRecipeID } = require('./middleware');
 
 const recipes = express.Router();
 
+// get all recipes
 recipes.get('/', async (request, response, next) => {
     try {
         let recipes;
@@ -25,6 +27,7 @@ recipes.get('/', async (request, response, next) => {
     }
 });
 
+// get a recipe with given ID
 recipes.get('/:id', validateRecipeID(), async (request, response, next) => {
     try {
         return response.status(200).json({data: request.recipe})
@@ -33,6 +36,7 @@ recipes.get('/:id', validateRecipeID(), async (request, response, next) => {
     }
 });
 
+// create a new recipe
 recipes.post('/', validateRecipe(), async (request, response, next) => {
     try {
         let recipe = await Recipe.addRecipe(request.recipeData);
@@ -43,6 +47,7 @@ recipes.post('/', validateRecipe(), async (request, response, next) => {
     }
 });
 
+// edit a recipe with given ID
 recipes.put('/:id', validateRecipe(), validateRecipeID(), async (request, response, next) => {
     try {
         let result = Recipe.editRecipe(request.params.id, request.recipeData);
@@ -53,6 +58,7 @@ recipes.put('/:id', validateRecipe(), validateRecipeID(), async (request, respon
     }
 })
 
+// delete a recipe with given ID
 recipes.delete('/:id', validateRecipe(), validateRecipeID(), async (request, response, next) => {
     try {
         let result = Recipe.deleteRecipe(request.params.id);
@@ -63,12 +69,16 @@ recipes.delete('/:id', validateRecipe(), validateRecipeID(), async (request, res
     }
 });
 
-// temporary route to test the model function
-recipes.get('/users/:id', async (request, response, next) => {
+// get a uri for the guest route, this should open to a specific recipe viewable by anyone with this link
+recipes.get('/:id/token', validateRecipeID(), async (request, response, next) => {
     try {
-        let recipes = await Recipe.getUserRecipes(request.params.id);
+        let url = `${request.protocol}://${request.get('host')}/guests?token=`;
 
-        return response.status(200).json(recipes);
+        const token = jwt.sign({
+            recipe_id: request.params.id,
+        }, process.env.JWT_SECRET, {expiresIn: "7d"})
+
+        return response.status(200).json({recipe: `${url}${token}`});
     } catch (error) {
         next(error);
     }
