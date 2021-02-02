@@ -4,9 +4,9 @@ const Recipe = require('../recipes/model');
 
 const { validateGuestToken } = require('./middleware');
 
-const guest = express.Router();
+const guests = express.Router();
 
-guest.get('/', validateGuestToken(), async (request, response, next) => {
+guests.get('/', validateGuestToken(), async (request, response, next) => {
    try {
        return response.status(200).json({message: 'Hello World'});
    } catch (error) {
@@ -14,4 +14,4 @@ guest.get('/', validateGuestToken(), async (request, response, next) => {
    }
 });
 
-module.exports = guest;
+module.exports = guests;

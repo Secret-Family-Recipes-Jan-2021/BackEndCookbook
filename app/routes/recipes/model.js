@@ -27,7 +27,29 @@ const getRecipes = async () => {
     }
 };
 
-const getUserRecipes = async (user_id) => {};
+const getUserRecipes = async (user_id) => {
+    let recipes = await db.table('recipes')
+        .join('users','recipes.user_id', 'users.id' )
+        .where('user_id', user_id)
+        .select('recipes.id',
+            'title',
+            'source',
+            'ingredients',
+            'instructions',
+            'username');
+
+    let categories = recipes.map((recipe) => {
+        return getRecipeCategories(recipe);
+    });
+
+    return Promise.all(categories)
+        .then((values) => {
+            return values
+        })
+        .catch((error) => {
+            console.log(error)
+        });
+};
 
 const getRecipeByID = async (recipe_id) => {
     let recipe = await db.table('recipes')

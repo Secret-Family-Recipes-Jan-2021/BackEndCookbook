@@ -30,6 +30,25 @@ const validateRecipe = () => {
     };
 };
 
+const validateRecipeID = () => {
+    return (request, response, next) => {
+        try {
+            let recipe = Recipe.getRecipeByID(request.params.id);
+
+            if (recipe) {
+                request.recipe = recipe;
+
+                next();
+            } else {
+                return response.status(404).json({message: 'recipe not found'});
+            }
+        } catch (error) {
+            next(error);
+        }
+    }
+};
+
 module.exports = {
     validateRecipe,
+    validateRecipeID
 };

@@ -2,7 +2,7 @@ const express = require('express');
 
 const Recipe = require('./model');
 
-const { validateRecipe } = require('./middleware');
+const { validateRecipe, validateRecipeID } = require('./middleware');
 
 const recipes = express.Router();
 
@@ -25,11 +25,9 @@ recipes.get('/', async (request, response, next) => {
     }
 });
 
-recipes.get('/:id', async (request, response, next) => {
+recipes.get('/:id', validateRecipeID(), async (request, response, next) => {
     try {
-        let recipe = await Recipe.getRecipeByID(request.params.id);
-
-        return response.status(200).json({data: recipe})
+        return response.status(200).json({data: request.recipe})
     } catch (error) {
         next(error);
     }
@@ -45,17 +43,32 @@ recipes.post('/', validateRecipe(), async (request, response, next) => {
     }
 });
 
-recipes.put('/:id', validateRecipe(), async (request, response, next) => {
+recipes.put('/:id', validateRecipe(), validateRecipeID(), async (request, response, next) => {
     try {
-        return response.status(200).json({message: 'hello world'});
+        let result = Recipe.editRecipe(request.params.id, request.recipeData);
+
+        return response.status(200).json(result);
     } catch (error) {
         next(error);
     }
 })
 
-recipes.delete('/:id', validateRecipe(), async (request, response, next) => {
+recipes.delete('/:id', validateRecipe(), validateRecipeID(), async (request, response, next) => {
     try {
-        return response.status(200).json({message: 'hello world'});
+        let result = Recipe.deleteRecipe(request.params.id);
+
+        return response.status(200).json(result);
+    } catch (error) {
+        next(error);
+    }
+});
+
+// temporary route to test the model function
+recipes.get('/users/:id', async (request, response, next) => {
+    try {
+        let recipes = await Recipe.getUserRecipes(request.params.id);
+
+        return response.status(200).json(recipes);
     } catch (error) {
         next(error);
     }
