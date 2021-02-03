@@ -3,19 +3,19 @@
 ##recipes
 must be logged in to use the recipes routes
 ```
-GET /api/recipes
+GET /recipes
 ```
 to search by Title use:
-`?title=RecipeTitle`
+`/recipes?title=RecipeTitle`
 to search by Category use a comma separated list of integers:
-`?category=1,2,3`
+`/recipes?category=1,2,3`
 
 ```
-GET /api/recipes/:id
+GET /recipes/:id
 ```
 
 ```	
-POST /api/recipes
+POST /recipes
 ```
 title is required
 categories is a list of category IDs
@@ -31,13 +31,13 @@ example:
 ```
 
 ```
-DELETE /api/recipes/:id
+DELETE /recipes/:id
 ```
 
 ##categories
 must be logged in to view the categories
 ```
-GET /api/categories
+GET /categories
 ```
 returns a list of all categories
 
