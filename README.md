@@ -42,7 +42,9 @@ DELETE /recipes/:id
 ```
 
 ##categories
+
 must be logged in to view the categories
+
 ```
 GET /categories
 ```
