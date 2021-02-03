@@ -17,7 +17,7 @@ const guests = require('./routes/guests/router');
 const app = express();
 
 // middleware
-app.use(cors);
+app.use(cors());
 app.use(requestLogger());
 app.use(express.json());
 app.use(cookieParser());
