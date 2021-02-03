@@ -1,17 +1,7 @@
 const supertest = require("supertest")
-const db = require("../data/dbConfig")
 const server = require("../app/server")
 
-
-beforeEach(async ()=> {
-    await db.seed.run()
-})
-
-afterAll(async ()=> {
-    await db.destroy()
-})
-
-describe("users tests", ()=> {
+const usertests = () => {
     it("gets a list of users", async ()=> {
         const res = await supertest(server).get("/users")
         expect(res.type).toBe("application/json")
@@ -23,7 +13,9 @@ describe("users tests", ()=> {
         const res = await supertest(server)
             .post("/users/register")
             .send({"username": "Spock", "password": "abc123"})
-          expect(res.statusCode).toBe(201)
-          expect(res.body.username).toBe("Spock")
+        expect(res.statusCode).toBe(201)
+        expect(res.body.username).toBe("Spock")
     })
-})
+};
+
+module.exports = usertests;

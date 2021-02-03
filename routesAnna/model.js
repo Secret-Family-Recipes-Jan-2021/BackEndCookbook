@@ -9,6 +9,7 @@ async function findByUserId(id){
     return await db("users")
         .select("username", "id", "password")
         .where("id", id)
+        .first()
 }
 
 async function findBy(username){

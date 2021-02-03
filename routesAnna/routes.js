@@ -23,11 +23,10 @@ router.post('/register', async (req, res, next)=> {
 
         const newUser = await model.add({
             username,
-            password: await bcrypt.hash(password, 10)
+            password: await bcrypt.hash(password, parseInt(process.env.HASH_ROUNDS))
         })
-        console.log(username, password, newUser)
 
-        res.status(201).json(newUser)
+        return res.status(201).json(newUser)
 
     }
     catch(err){
