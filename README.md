@@ -5,9 +5,13 @@ must be logged in to use the recipes routes
 ```
 GET /recipes
 ```
+
 to search by Title use:
+
 `/recipes?title=RecipeTitle`
+
 to search by Category use a comma separated list of integers:
+
 `/recipes?category=1,2,3`
 
 ```
@@ -17,8 +21,11 @@ GET /recipes/:id
 ```	
 POST /recipes
 ```
-title is required
-categories is a list of category IDs
+
+`title` is required
+
+`categories` is a list of category IDs, integers
+
 example:
 ```
 {
@@ -52,9 +59,14 @@ GET /guests?token=JsonWebToken
 POST /users/login
 ```
 
-requires a user object, for example: `{username: "jameskirk", password: "12345"}`
+requires a user object, for example: 
+
+`{username: "jameskirk", password: "12345"}`
+
 ```
 POST /users/register
 ```
 
-requires a user object, for example: `{username: "jameskirk", password: "12345"}`
+requires a user object, for example: 
+
+`{username: "jameskirk", password: "12345"}`
