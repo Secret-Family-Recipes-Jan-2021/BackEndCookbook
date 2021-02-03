@@ -2,6 +2,7 @@
 const express = require('express');
 require("dotenv").config();
 const cookieParser = require("cookie-parser");
+const cors = require('cors');
 
 // middleware imports
 const requestLogger = require('./middleware/requestLogger');
@@ -16,6 +17,7 @@ const guests = require('./routes/guests/router');
 const app = express();
 
 // middleware
+app.use(cors);
 app.use(requestLogger());
 app.use(express.json());
 app.use(cookieParser());
