@@ -25,6 +25,7 @@ router.post('/register', async (req, res, next)=> {
             username,
             password: await bcrypt.hash(password, 10)
         })
+        console.log(username, password, newUser)
 
         res.status(201).json(newUser)
 
@@ -75,7 +76,7 @@ router.post("/login", async (req, res, next)=> {
 router.get("/", async (req, res, next)=> {
     try{
         const id = req.params.id
-        const users = model.listUsers()
+        const users = await model.listUsers()
 
         res.status(200).json(users)
 

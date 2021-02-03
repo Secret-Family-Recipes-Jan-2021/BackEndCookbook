@@ -12,19 +12,19 @@ async function findByUserId(id){
 }
 
 async function findBy(username){
-    return db("users")
+    return await db("users")
         .where("username", username)
         .first()
 }
 
 function findIt(username){
-    return("users")
+    return db("users")
         .select("id", "username", "password")
         .where(username)
 }
 
 function listUsers(){
-    return("users")
+    return db("users")
 }
 
 module.exports = {
