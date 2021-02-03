@@ -4,6 +4,8 @@ const model = require("./model")
 //const {restrict} = require("./middleware")
 const jwt = require("jsonwebtoken")
 
+const SALT = process.env.HASH_ROUNDS ? parseInt(process.env.HASH_ROUNDS) : 10;
+
 router.post('/register', async (req, res, next)=> {
     try{
         const {username, password} = req.body
@@ -23,7 +25,7 @@ router.post('/register', async (req, res, next)=> {
 
         const newUser = await model.add({
             username,
-            password: await bcrypt.hash(password, parseInt(process.env.HASH_ROUNDS))
+            password: await bcrypt.hash(password, SALT)
         })
 
         return res.status(201).json(newUser)
