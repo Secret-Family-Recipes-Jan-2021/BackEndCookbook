@@ -33,7 +33,6 @@ exports.seed = async function(knex) {
             // Inserts seed entries
             return knex('recipes').insert([
                 {
-                    id: 1,
                     instructions: 'Get paper cup. Put dirt in it.',
                     ingredients: '1 paper cup. 1 scoop of dirt.',
                     source: 'Science Fair',
@@ -47,20 +46,20 @@ exports.seed = async function(knex) {
         .then(function () {
             // Inserts seed entries
             return knex('categories').insert([
-                {id: 1, category_name: 'joke'},
-                {id: 2, category_name: 'dinner'},
-                {id: 3, category_name: 'breakfast'},
-                {id: 4, category_name: 'lunch'},
-                {id: 5, category_name: 'brunch'},
-                {id: 6, category_name: 'second breakfast'},
-                {id: 7, category_name: 'lembas'},
-                {id: 8, category_name: 'spicy'},
-                {id: 9, category_name: 'sweet'},
-                {id: 10, category_name: 'sour'},
-                {id: 11, category_name: 'munchies'},
-                {id: 12, category_name: 'tea'},
-                {id: 13, category_name: 'vegetarian'},
-                {id: 14, category_name: 'probably safe'}
+                {category_name: 'joke'},
+                {category_name: 'dinner'},
+                {category_name: 'breakfast'},
+                {category_name: 'lunch'},
+                {category_name: 'brunch'},
+                {category_name: 'second breakfast'},
+                {category_name: 'lembas'},
+                {category_name: 'spicy'},
+                {category_name: 'sweet'},
+                {category_name: 'sour'},
+                {category_name: 'munchies'},
+                {category_name: 'tea'},
+                {category_name: 'vegetarian'},
+                {category_name: 'probably safe'}
             ]);
         });
 
