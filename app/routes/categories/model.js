@@ -11,10 +11,10 @@ const getByID = (id) => {
 }
 
 const create = async (data) => {
-    let id = await db.table('categories')
+    let [id] = await db.table('categories')
         .insert(data);
 
-    return getByID(id[0]);
+    return getByID(id);
 }
 
 const edit = async (id, data) => {
