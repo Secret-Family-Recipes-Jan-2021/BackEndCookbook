@@ -6,7 +6,8 @@ async function add(user){
     await db("users")
         .insert(user, 'id')
         .then((result) => {
-            return findByUserId(result);
+            console.log(result)
+            return findByUserId(parseInt(result));
         });
 }
 
