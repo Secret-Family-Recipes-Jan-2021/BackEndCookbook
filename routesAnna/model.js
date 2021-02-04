@@ -13,7 +13,6 @@ async function add(user){
 
 async function findByUserId(id){
     return await db("users")
-        .select("id", "username")
         .where("id", id)
         .first()
 }
