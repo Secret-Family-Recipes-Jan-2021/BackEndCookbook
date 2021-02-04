@@ -11,11 +11,11 @@ exports.seed = async function(knex) {
     await knex('users').del()
         .then(function () {
             let users = [
-                    {id: 1, username: 'jameskirk', password: '12345'},
-                    {id: 2, username: 'brian_r', password: '12345'},
-                    {id: 3, username: 'babbish', password: '12345'},
-                    {id: 4, username: 'yondu', password: '12345'},
-                    {id: 5, username: 'curie', password: '12345'}
+                    {username: 'jameskirk', password: '12345'},
+                    {username: 'brian_r', password: '12345'},
+                    {username: 'babbish', password: '12345'},
+                    {username: 'yondu', password: '12345'},
+                    {username: 'curie', password: '12345'}
                 ];
 
             let hashed = users.map(async (user) => {
