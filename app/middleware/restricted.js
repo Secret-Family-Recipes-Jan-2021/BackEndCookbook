@@ -4,7 +4,7 @@ module.exports = (request, response, next) => {
     try {
         let token = request.cookies.token ? request.cookies.token : false;
 
-        console.log(request.headers);
+        console.log(request.headers.authorization);
 
         if (token) {
             jwt.verify(token, process.env.JWT_SECRET, (error, decoded) => {
