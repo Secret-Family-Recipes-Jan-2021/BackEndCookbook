@@ -1,7 +1,9 @@
 const bcrypt = require('bcrypt');
 
+const SALT = process.env.HASH_ROUNDS ? parseInt(process.env.HASH_ROUNDS) : 10;
+
 const seedHashed = async (password) => {
-    return bcrypt.hash(password, parseInt(process.env.HASH_ROUNDS));
+    return bcrypt.hash(password, SALT);
 };
 
 exports.seed = async function(knex) {
