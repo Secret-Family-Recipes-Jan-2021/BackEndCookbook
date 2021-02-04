@@ -100,7 +100,7 @@ const addRecipe = async (data) => {
         user_id: data.user_id
     };
 
-    let [id] = await db.table('recipes')
+    let id = await db.table('recipes')
         .insert(recipe);
 
     let results = categories.map((category) => {
@@ -109,7 +109,7 @@ const addRecipe = async (data) => {
 
     Promise.all(results)
         .then((values) => {
-            return getRecipeByID(id);
+            return getRecipeByID(id[0]);
         })
         .catch((error) => {
             return error;
