@@ -21,7 +21,7 @@ recipes.get('/', async (request, response, next) => {
             recipes = await Recipe.getRecipes();
         }
 
-        return response.status(200).json({data: recipes});
+        return response.status(200).json(recipes);
     } catch (error) {
         next(error);
     }
@@ -30,7 +30,7 @@ recipes.get('/', async (request, response, next) => {
 // get a recipe with given ID
 recipes.get('/:id', validateRecipeID(), async (request, response, next) => {
     try {
-        return response.status(200).json({data: request.recipe})
+        return response.status(200).json(request.recipe)
     } catch (error) {
         next(error);
     }
@@ -41,7 +41,7 @@ recipes.post('/', validateRecipe(), async (request, response, next) => {
     try {
         let recipe = await Recipe.addRecipe(request.recipeData);
 
-        return response.status(201).json({message: 'recipe successfully created', data: recipe});
+        return response.status(201).json({message: 'recipe successfully created', recipe: recipe});
     } catch (error) {
         next(error);
     }
@@ -78,7 +78,7 @@ recipes.get('/:id/token', validateRecipeID(), async (request, response, next) =>
             recipe_id: request.params.id,
         }, process.env.JWT_SECRET, {expiresIn: "7d"})
 
-        return response.status(200).json({recipe: `${url}${token}`});
+        return response.status(200).json({link: `${url}${token}`});
     } catch (error) {
         next(error);
     }
