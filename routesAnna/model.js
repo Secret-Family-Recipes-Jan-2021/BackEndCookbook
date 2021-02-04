@@ -5,9 +5,9 @@ async function add(user){
 
     await db("users")
         .insert(user, 'id')
-        .then((id) => {
-            console.log(id);
-            return findByUserId(id);
+        .then((result) => {
+            console.log(`result: ${result}`);
+            return findByUserId(result[0]);
         });
 }
 
