@@ -3,7 +3,7 @@ const jwt = require("jsonwebtoken");
 module.exports = (request, response, next) => {
     try {
         // let token = request.cookies.token ? request.cookies.token : false;
-        let token = request.authorization.token ? request.authorization.token : false;
+        let token = request.authorization ? request.authorization : false;
          console.log(request.authorization);
 
         if (token) {
