@@ -7,7 +7,7 @@ async function add(user){
         .insert(user, 'id')
         .then((result) => {
             console.log(`result: ${result}`);
-            return findByUserId(result[0]);
+            return findByUserId(result);
         });
 }
 
