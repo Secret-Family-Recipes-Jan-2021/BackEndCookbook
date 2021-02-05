@@ -41,7 +41,6 @@ recipes.post('/', validateRecipe(), async (request, response, next) => {
     try {
 
         let recipe = await Recipe.addRecipe(request.recipeData);
-        console.log(recipe);
 
         return response.status(201).json({message: 'recipe successfully created', recipe: recipe});
     } catch (error) {

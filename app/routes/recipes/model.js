@@ -103,19 +103,13 @@ const addRecipe = async (data) => {
 
     let id = await db.table('recipes').insert(recipe);
 
-    let results = categories.map(async (category) => {
-        console.log(category, id);
-        let results = await db.table('recipe_category_relation').insert({recipe_id: id[0], category_id: parseInt(category)});
-        return results[0];
+    let recipeCategory = categories.map((category) => {
+        return {recipe_id: id[0], category_id: parseInt(category)};
     });
 
-    return Promise.all([id, results])
-        .then(() => {
-            return getRecipeByID(id[0]);
-        })
-        .catch((error) => {
-            console.log(error);
-        });
+    let results = await db.table('recipe_category_relation').insert(recipeCategory);
+
+    return getRecipeByID(id[0]);
 };
 
 const addRecipeCategories = async (recipe_id, categories) => {
