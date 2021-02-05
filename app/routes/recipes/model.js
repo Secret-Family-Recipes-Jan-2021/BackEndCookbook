@@ -104,6 +104,7 @@ const addRecipe = async (data) => {
         .insert(recipe);
 
     let results = categories.map((category) => {
+        console.log({recipe_id: id[0], category_id: parseInt(category)});
         return db.table('recipe_category_relation').insert({recipe_id: id[0], category_id: parseInt(category)});
     });
 
