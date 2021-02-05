@@ -104,9 +104,9 @@ const addRecipe = async (data) => {
     let id = await insertRecpie(recipe);
     console.log(id);
 
-    let recipeCategory = await Promise.all(categories.map((category) => {
+    let recipeCategory = categories.map((category) => {
         return {recipe_id: id[0], category_id: parseInt(category)};
-    }));
+    });
     console.log(recipeCategory);
 
     let results = await insertRecipeCategories(recipeCategory);
