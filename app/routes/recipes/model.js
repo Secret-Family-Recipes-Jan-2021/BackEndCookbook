@@ -105,10 +105,10 @@ const addRecipe = async (data) => {
     console.log(id);
 
     let recipeCategory = await buildRecipeCategoryRelationData(id, categories);
-    console.log(recipeCategory);
+    // console.log(recipeCategory);
 
-    let results = await insertRecipeCategories(recipeCategory);
-    console.log(results);
+    // let results = await insertRecipeCategories(recipeCategory);
+    // console.log(results);
 
     return getRecipeByID(id);
 };
@@ -126,7 +126,9 @@ const buildRecipeCategoryRelationData = (recipe_id, categories) => {
         return {recipe_id: recipe_id, category_id: parseInt(category)};
     });
 
-    return Promise.all(results);
+    return Promise.all(results).then((values) => {
+        return insertRecipeCategories(values);
+    });
 };
 
 const editRecipe = async (recipe_id, data) => {
