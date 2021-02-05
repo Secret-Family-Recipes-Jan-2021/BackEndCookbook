@@ -101,33 +101,28 @@ const addRecipe = async (data) => {
     };
     let categories = data.categories;
 
-    let id = await db.table('recipes').insert(recipe);
+    let id = await insertRecpie(recipe);
 
     let recipeCategory = await Promise.all(categories.map((category) => {
         return {recipe_id: id[0], category_id: parseInt(category)};
     }));
 
-    let results = await db.table('recipe_category_relation').insert(recipeCategory);
+    let results = await insertRecipeCategories(recipeCategory);
 
     return getRecipeByID(id[0]);
 };
 
-const addRecipeCategories = async (recipe_id, categories) => {
+const insertRecpie = (data) => {
     try {
-        console.log(recipe_id, categories)
+        return db.table('recipes').insert(data);
+    } catch (error) {
+        return error;
+    }
+};
 
-        let results = categories.map(async (category) => {
-            let id = await db.table('recipe_category_relation').insert({recipe_id: recipe_id, category_id: parseInt(category)});
-            return id[0];
-        });
-
-        return Promise.all(results)
-            .then((values) => {
-                return values;
-            })
-            .catch((error) => {
-                console.log(error);
-            });
+const insertRecipeCategories = (data) => {
+    try {
+        return db.table('recipe_category_relation').insert(data);
     } catch (error) {
         return error;
     }
@@ -202,6 +197,5 @@ module.exports = {
     editRecipe,
     deleteRecipe,
     searchRecipes,
-    searchByCategories,
-    addRecipeCategories
+    searchByCategories
 };
