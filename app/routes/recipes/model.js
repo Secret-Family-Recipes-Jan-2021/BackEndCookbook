@@ -114,11 +114,11 @@ const addRecipe = async (data) => {
 };
 
 const insertRecipe = (data) => {
-    return db.table('recipes').insert(data);
+    return db.table('recipes').insert(data, 'id');
 };
 
 const insertRecipeCategories = (data) => {
-    return db.table('recipe_category_relation').insert(data);
+    return db.table('recipe_category_relation').insert(data, 'id');
 };
 
 const buildRecipeCategoryRelationData = (recipe_id, categories) => {
