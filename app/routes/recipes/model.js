@@ -74,13 +74,13 @@ const getUserRecipeByID = async (user_id, recipe_id) => {
 const getRecipeByID = async (recipe_id) => {
     let recipe = await db.table('recipes')
         .join('users','recipes.user_id', '=', 'users.id' )
-        .select('recipes.id as id',
+        .select('recipes.id as recipe_id',
             'title',
             'source',
             'ingredients',
             'instructions',
             'username')
-        .where('recipes.id', recipe_id)
+        .where('recipe_id', recipe_id)
         .first();
 
     let categories = await db.table('recipe_category_relation as rcr')
