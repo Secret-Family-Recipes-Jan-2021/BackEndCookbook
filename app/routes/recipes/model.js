@@ -100,13 +100,15 @@ const addRecipe = async (data) => {
         user_id: data.user_id
     };
 
-    let id = await db.table('recipes')
-        .insert(recipe);
-
-    let results = categories.map((category) => {
-        console.log({recipe_id: id[0], category_id: parseInt(category)});
-        return db.table('recipe_category_relation').insert({recipe_id: id[0], category_id: parseInt(category)});
-    });
+    let results;
+    await db.table('recipes')
+        .insert(recipe)
+        .then((id) => {
+            results = categories.map((category) => {
+                console.log({recipe_id: id[0], category_id: parseInt(category)});
+                return db.table('recipe_category_relation').insert({recipe_id: id[0], category_id: parseInt(category)});
+            });
+        });
 
     Promise.all(results)
         .then((values) => {
