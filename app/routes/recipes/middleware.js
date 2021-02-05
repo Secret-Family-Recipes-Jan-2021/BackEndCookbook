@@ -3,13 +3,14 @@ const Recipe = require('./model');
 const validateRecipe = () => {
     return (request, response, next) => {
         try {
-            let { instructions, ingredients, source, title, categories} = request.body;
-            let user_id = request.token.userId
+            let { instructions, ingredients, source, title } = request.body;
+            let categories = request.body.categories ? request.body.categories.split(',') : [];
+            let user_id = request.token.userId;
 
             if(!title) {
                 return response.status(400).json({message: 'recipe title required'});
             } else if(!Array.isArray(categories)) {
-                return response.status(400).json({message: 'categories must be an array of category IDs'});
+                return response.status(400).json({message: 'categories must be an comma separated string of IDs'});
             } else {
                 request.recipeData = {
                     title: title,
