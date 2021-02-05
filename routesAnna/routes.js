@@ -23,9 +23,11 @@ router.post('/register', async (req, res, next)=> {
             })
         }
 
+        let hashedPassword = await bcrypt.hash(password, SALT)
+
         const newUser = await model.add({
-            username,
-            password: await bcrypt.hash(password, SALT)
+            username: username,
+            password: hashedPassword
         })
 
         return res.status(201).json(newUser)

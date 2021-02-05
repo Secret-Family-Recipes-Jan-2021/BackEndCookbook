@@ -1,13 +1,14 @@
 const db = require("../data/dbConfig")
 
 async function add(user){
-    const [id] = await db("users").insert(user)
-        return findByUserId(id)
+    let [id] = await db("users")
+        .insert(user, 'id');
+
+    return findByUserId(id);
 }
 
 async function findByUserId(id){
     return await db("users")
-        .select("username", "id", "password")
         .where("id", id)
         .first()
 }
