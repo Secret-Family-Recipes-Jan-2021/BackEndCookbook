@@ -102,12 +102,15 @@ const addRecipe = async (data) => {
     let categories = data.categories;
 
     let id = await insertRecpie(recipe);
+    console.log(id);
 
     let recipeCategory = await Promise.all(categories.map((category) => {
         return {recipe_id: id[0], category_id: parseInt(category)};
     }));
+    console.log(recipeCategory);
 
     let results = await insertRecipeCategories(recipeCategory);
+    console.log(results);
 
     return getRecipeByID(id[0]);
 };
