@@ -101,12 +101,10 @@ const addRecipe = async (data) => {
     };
     let categories = data.categories;
 
-    let id = await insertRecpie(recipe);
+    let id = await insertRecipe(recipe);
     console.log(id);
 
-    let recipeCategory = categories.map((category) => {
-        return {recipe_id: id[0], category_id: parseInt(category)};
-    });
+    let recipeCategory = await buildRecipeCategoryRelationData(id[0], categories);
     console.log(recipeCategory);
 
     let results = await insertRecipeCategories(recipeCategory);
@@ -115,20 +113,20 @@ const addRecipe = async (data) => {
     return getRecipeByID(id[0]);
 };
 
-const insertRecpie = (data) => {
-    try {
-        return db.table('recipes').insert(data);
-    } catch (error) {
-        return error;
-    }
+const insertRecipe = (data) => {
+    return db.table('recipes').insert(data);
 };
 
 const insertRecipeCategories = (data) => {
-    try {
-        return db.table('recipe_category_relation').insert(data);
-    } catch (error) {
-        return error;
-    }
+    return db.table('recipe_category_relation').insert(data);
+};
+
+const buildRecipeCategoryRelationData = (recipe_id, categories) => {
+    let results = categories.map((category) => {
+        return {recipe_id: recipe_id, category_id: parseInt(category)};
+    });
+
+    return Promise.all(results);
 };
 
 const editRecipe = async (recipe_id, data) => {
