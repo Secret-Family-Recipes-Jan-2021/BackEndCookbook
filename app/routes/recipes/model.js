@@ -100,10 +100,10 @@ const addRecipe = async (data) => {
         user_id: data.user_id
     };
 
-    let [id] = await db.table('recipes')
+    let id = await db.table('recipes')
         .insert(recipe);
 
-    return getRecipeByID(id);
+    return getRecipeByID(id[0]);
 };
 
 const editRecipe = async (recipe_id, data) => {
