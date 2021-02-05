@@ -43,10 +43,7 @@ recipes.post('/', validateRecipe(), async (request, response, next) => {
         let recipe = await Recipe.addRecipe(request.recipeData);
         console.log(recipe);
 
-        let categories = await Recipe.addRecipeCategories(recipe.recipe_id, request.recipeData.categories);
-        console.log(categories);
-
-        return response.status(201).json({message: 'recipe successfully created', recipe: {...recipe, categories: categories}});
+        return response.status(201).json({message: 'recipe successfully created', recipe: recipe});
     } catch (error) {
         next(error);
     }

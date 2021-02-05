@@ -74,13 +74,13 @@ const getUserRecipeByID = async (user_id, recipe_id) => {
 const getRecipeByID = async (recipe_id) => {
     let recipe = await db.table('recipes')
         .join('users','recipes.user_id', '=', 'users.id' )
-        .select('recipes.id as recipe_id',
+        .select('recipes.id as id',
             'title',
             'source',
             'ingredients',
             'instructions',
             'username')
-        .where('recipe_id', recipe_id)
+        .where('recipes.id', recipe_id)
         .first();
 
     let categories = await db.table('recipe_category_relation as rcr')
@@ -99,10 +99,23 @@ const addRecipe = async (data) => {
         instructions: data.instructions,
         user_id: data.user_id
     };
+    let categories = data.categories;
 
-    let id = await db.table('recipes').insert(recipe)
+    let id = await db.table('recipes').insert(recipe);
 
-    return getRecipeByID(id[0]);
+    let results = categories.map(async (category) => {
+        console.log(category, id);
+        let results = await db.table('recipe_category_relation').insert({recipe_id: id[0], category_id: parseInt(category)});
+        return results[0];
+    });
+
+    return Promise.all(results)
+        .then(() => {
+            return getRecipeByID(id[0]);
+        })
+        .catch((error) => {
+            console.log(error);
+        });
 };
 
 const addRecipeCategories = async (recipe_id, categories) => {
