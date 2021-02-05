@@ -109,7 +109,7 @@ const addRecipe = async (data) => {
 
     Promise.all(results)
         .then((values) => {
-            return getRecipeByID(id);
+            return getRecipeByID(id[0]);
         })
         .catch((error) => {
             return error;
