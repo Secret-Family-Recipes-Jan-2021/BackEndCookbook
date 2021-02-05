@@ -104,8 +104,8 @@ const addRecipe = async (data) => {
     let [id] = await insertRecipe(recipe);
     console.log(id);
 
-    // let recipeCategory = await buildRecipeCategoryRelationData(id[0], categories);
-    // console.log(recipeCategory);
+    let recipeCategory = await buildRecipeCategoryRelationData(id, categories);
+    console.log(recipeCategory);
 
     // let results = await insertRecipeCategories(recipeCategory);
     // console.log(results);
