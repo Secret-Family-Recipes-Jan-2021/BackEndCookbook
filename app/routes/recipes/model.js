@@ -100,14 +100,30 @@ const addRecipe = async (data) => {
         user_id: data.user_id
     };
 
-    db.table('recipes')
-        .insert(recipe).then(() => {})
-        .then((result) => {
-            return getRecipeByID(result[0]);
-        })
-        .catch((error) => {
-            return error;
+    let id = await db.table('recipes').insert(recipe)
+
+    return getRecipeByID(id[0]);
+};
+
+const addRecipeCategories = async (recipe_id, categories) => {
+    try {
+        console.log(recipe_id, categories)
+
+        let results = categories.map(async (category) => {
+            let id = await db.table('recipe_category_relation').insert({recipe_id: recipe_id, category_id: parseInt(category)});
+            return id[0];
         });
+
+        return Promise.all(results)
+            .then((values) => {
+                return values;
+            })
+            .catch((error) => {
+                console.log(error);
+            });
+    } catch (error) {
+        return error;
+    }
 };
 
 const editRecipe = async (recipe_id, data) => {
@@ -168,25 +184,6 @@ const getRecipeCategories = async (recipe) => {
         .where('rcr.recipe_id', recipe.id);
 
     return {...recipe, categories: categories};
-};
-
-const addRecipeCategories = async (recipe_id, categories) => {
-    try {
-        let results = categories.map(async (category) => {
-            let [id] = await db.table('recipe_category_relation').insert({recipe_id: recipe_id, category_id: parseInt(category)});
-            return id;
-        });
-
-        return Promise.all(results)
-            .then((values) => {
-                return values;
-            })
-            .catch((error) => {
-                console.log(error);
-            });
-    } catch (error) {
-        return error;
-    }
 };
 
 module.exports = {
