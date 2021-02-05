@@ -118,7 +118,7 @@ const insertRecipe = (data) => {
 };
 
 const insertRecipeCategories = (data) => {
-    return db.table('recipe_category_relation').insert(data, 'id');
+    return db.table('recipe_category_relation').insert(data);
 };
 
 const buildRecipeCategoryRelationData = (recipe_id, categories) => {
