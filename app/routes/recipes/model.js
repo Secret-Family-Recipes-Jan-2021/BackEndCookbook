@@ -74,7 +74,8 @@ const getUserRecipeByID = async (user_id, recipe_id) => {
 const getRecipeByID = async (recipe_id) => {
     let recipe = await db.table('recipes')
         .join('users','recipes.user_id', '=', 'users.id' )
-        .select('title',
+        .select('recipes.id as id',
+            'title',
             'source',
             'ingredients',
             'instructions',
@@ -91,7 +92,6 @@ const getRecipeByID = async (recipe_id) => {
 };
 
 const addRecipe = async (data) => {
-    let categories = data.categories;
     let recipe = {
         title: data.title,
         source: data.source,
@@ -100,23 +100,10 @@ const addRecipe = async (data) => {
         user_id: data.user_id
     };
 
-    let results;
-    await db.table('recipes')
-        .insert(recipe)
-        .then((id) => {
-            results = categories.map((category) => {
-                console.log({recipe_id: id[0], category_id: parseInt(category)});
-                return db.table('recipe_category_relation').insert({recipe_id: id[0], category_id: parseInt(category)});
-            });
-        });
+    let [id] = await db.table('recipes')
+        .insert(recipe);
 
-    Promise.all(results)
-        .then((values) => {
-            return getRecipeByID(id[0]);
-        })
-        .catch((error) => {
-            return error;
-        });
+    return getRecipeByID(id);
 };
 
 const editRecipe = async (recipe_id, data) => {
@@ -179,6 +166,25 @@ const getRecipeCategories = async (recipe) => {
     return {...recipe, categories: categories};
 };
 
+const addRecipeCategories = async (recipe_id, categories) => {
+    try {
+        let results = categories.map(async (category) => {
+            let [id] = await db.table('recipe_category_relation').insert({recipe_id: recipe_id, category_id: parseInt(category)});
+            return id;
+        });
+
+        return Promise.all(results)
+            .then((values) => {
+                return values;
+            })
+            .catch((error) => {
+                console.log(error);
+            });
+    } catch (error) {
+        return error;
+    }
+};
+
 module.exports = {
     getRecipes,
     getRecipeByID,
@@ -188,5 +194,6 @@ module.exports = {
     editRecipe,
     deleteRecipe,
     searchRecipes,
-    searchByCategories
+    searchByCategories,
+    addRecipeCategories
 };

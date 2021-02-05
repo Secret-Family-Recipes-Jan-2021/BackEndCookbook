@@ -5,9 +5,6 @@ const validateRecipe = () => {
         try {
             let { instructions, ingredients, source, title } = request.body;
             let categories = request.body.categories ? request.body.categories.split(',') : [];
-
-            console.log(categories, request.body.categories);
-
             let user_id = request.token.userId;
 
             if(!title) {
