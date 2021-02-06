@@ -161,7 +161,7 @@ const deleteRecipe = async (recipe_id) => {
 
 const searchRecipes = async (term) => {
     try {
-        return db.table('recipes').where('title', 'like', `%${term}%`);
+        return db.table('recipes').where('title', 'ILIKE', `%${term}%`);
     } catch (error) {
         return error;
     }
